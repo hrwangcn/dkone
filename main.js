@@ -1,20 +1,9 @@
 function calcBoard(vec, player) {
   //有效棋子个数
-  var chessNumber = 0;
+  var chessNumber = getChessNumber(vec);
   //执手方棋子个数
-  var playerChessNumber = 0;
-  for (let i = 0; i < 4; i++) {
-    if (vec[i] == player) {
-      //计数执手方棋子数
-      playerChessNumber++;
-    }
-    if (vec[i] != 0) {
-      //计数有效元素个数
-      chessNumber++;
-    }
-  }
-  console.log(chessNumber);
-  console.log(playerChessNumber);
+  var playerChessNumber = getPlayerChessNumber(vec,player);
+
   if (chessNumber < 3) { //有效棋子<3，不发生消子
     //return vec;
   } else if (chessNumber === 3 && vec.indexOf(0)%3 === 0) { // 有效子数>3且0在头或尾，需评估是否可以消子
@@ -62,6 +51,10 @@ function calcBoard(vec, player) {
   return vec;
 }
 
+function checkWin(){
+  
+}
+
 //消子方法
 function removeOtherPlayer(vec, player) {
   for (let i = 0; i < 4; i++) {
@@ -92,4 +85,25 @@ function setArrayColumn(arr, vec, col) {
   for (let i = 0; i < 4; i++) {
     arr[i][col] = vec[i];
   }
+}
+
+//执手方棋子个数
+function getPlayerChessNumber(vec,player){
+  var playerChessNumber = 0;
+  for (let i = 0; i < 4; i++) {
+    if (vec[i] == player) {
+      playerChessNumber++;
+    }
+  }
+  return playerChessNumber;
+}
+
+//所有棋子个数
+function getChessNumber(vec){
+  var chessNumber = 0;
+  for(let i = 0;i<4;i++){
+    if(vec[i]!=0)
+      chessNumber++;
+  }
+  return chessNumber;
 }
