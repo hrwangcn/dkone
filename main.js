@@ -22,11 +22,7 @@ function calcBoard(vec, player) {
       //return vec;
     }
   } else if (chessNumber === 4) {
-    if (playerChessNumber === 4) { //一条吕
-      alert(player===1?"红方赢了!":"绿方赢了");
-    } else if (playerChessNumber === 3) {
-      //return vec;
-    } else if (playerChessNumber === 2) { //两颊沟、两撑乎、二顶二
+    if (playerChessNumber === 2) { //两颊沟、两撑乎、二顶二
       if (vec[0] === player && vec[3] === player) {//两颊沟
         console.log("两颊沟");
         vec = removeOtherPlayer(vec, player);
@@ -63,6 +59,16 @@ function removeOtherPlayer(vec, player) {
     }
   }
   return vec;
+}
+
+function checkWin(vec,player){
+  let chessNumber = 0;
+  let playerChessNumber = 0;
+  chessNumber = getChessNumber(vec);
+  playerChessNumber = getPlayerChessNumber(vec,player);
+  if(chessNumber === playerChessNumber && chessNumber === 4){
+    alert(player === 1? "红方赢了":"蓝方赢了");
+  }
 }
 
 function getArrayRow(arr, row) {

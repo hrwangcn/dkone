@@ -42,10 +42,12 @@
             /** 运算消子 **/
             //消行
             let vectorRow = getArrayRow(arr,i);
+            checkWin(vectorRow,usr);
             vectorRow = calcBoard(vectorRow,usr);
             setArrayRow(arr,vectorRow,i);
             //消列
             let vectorCol = getArrayColumn(arr,j);
+            checkWin(vectorCol,usr);
             vectorCol = calcBoard(vectorCol,usr);
             setArrayColumn(arr,vectorCol,j);
             /** 静等200ms将运算后的矩阵投射到前台 **/
