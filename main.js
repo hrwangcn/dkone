@@ -62,10 +62,8 @@ function removeOtherPlayer(vec, player) {
 }
 
 function checkWin(vec,player){
-  let chessNumber = 0;
-  let playerChessNumber = 0;
-  chessNumber = getChessNumber(vec);
-  playerChessNumber = getPlayerChessNumber(vec,player);
+  let chessNumber = getChessNumber(vec);
+  let playerChessNumber = getPlayerChessNumber(vec,player);
   if(chessNumber === playerChessNumber && chessNumber === 4){
     alert(player === 1? "红方赢了":"蓝方赢了");
   }
