@@ -4,9 +4,7 @@ function calcBoard(vec, player) {
   //执手方棋子个数
   var playerChessNumber = getPlayerChessNumber(vec,player);
 
-  if (chessNumber < 3) { //有效棋子<3，不发生消子
-    //return vec;
-  } else if (chessNumber === 3 && vec.indexOf(0)%3 === 0) { // 有效子数>3且0在头或尾，需评估是否可以消子
+  if (chessNumber === 3 && vec.indexOf(0)%3 === 0) { // 有效子数>3且0在头或尾，需评估是否可以消子
     //判断执手方棋子数
     if (playerChessNumber === 1) {
       /** 判断有无一撑乎，头或尾为0且执手子落在对手子中间 **/
@@ -18,8 +16,6 @@ function calcBoard(vec, player) {
       /**判断有无二顶一或一夹沟，执手子相邻为二顶一，不相邻为一夹沟**/
         console.log(vec[vec.indexOf(player)+1]===player?"二顶一":"一夹沟");
         vec = removeOtherPlayer(vec, player);
-    } else { //3个都是执手子，不再调用资源计算
-      //return vec;
     }
   } else if (chessNumber === 4) {
     if (playerChessNumber === 2) { //两颊沟、两撑乎、二顶二
@@ -38,11 +34,7 @@ function calcBoard(vec, player) {
         console.log("一串三");
         vec = removeOtherPlayer(vec, player);
       }
-    } else {
-      //return vec;
     }
-  } else {
-    //return vec;
   }
   return vec;
 }

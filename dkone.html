@@ -38,7 +38,7 @@
           if(arr[i][j]===0){ //判断是否可以落子
             arr[i][j] = usr;
             //更新前端页面
-            fillElement(target,usr);
+            mapMaxtri();
             /** 运算消子 **/
             //消行
             let vectorRow = getArrayRow(arr,i);
