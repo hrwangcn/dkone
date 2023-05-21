@@ -39,10 +39,6 @@ function calcBoard(vec, player) {
   return vec;
 }
 
-function checkWin(){
-  
-}
-
 //消子方法
 function removeOtherPlayer(vec, player) {
   for (let i = 0; i < 4; i++) {
@@ -53,12 +49,9 @@ function removeOtherPlayer(vec, player) {
   return vec;
 }
 
-function checkWin(vec,player){
-  let chessNumber = getChessNumber(vec);
-  let playerChessNumber = getPlayerChessNumber(vec,player);
-  if(chessNumber === playerChessNumber && chessNumber === 4){
-    alert(player === 1? "红方赢了":"蓝方赢了");
-  }
+function checkWin(vec){
+  let sumVec = vec[0]+vec[1]+vec[2]+vec[3];
+  return Math.abs(sumVec) === 4;
 }
 
 function getArrayRow(arr, row) {
