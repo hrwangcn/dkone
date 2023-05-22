@@ -1,50 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+  <title>dkone</title>
   <meta charset="UTF-8">
-  <style>
-    #board {
-      margin:5%;
-      height:400px;width:400px;
-      background-color:white;
-      opacity:0.5;
-    }
-    .cell {
-			margin:1px;border:4px;
-			border-radius:5px;
-			border-style:solid;border-color:gray;
-      height:90px;width:90px;
-      background-color:none;
-      float:left;
-    }
-    .cell_inactive{
-      margin:1px;border:4px;
-			border-radius:5px;
-			border-style:solid;border-color:gray;
-      height:90px;width:90px;
-      background-color:none;
-      float:left;
-      point-events:none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+  <link rel='stylesheet' href='style.css' type='text/css'>
   <script src="main.js"></script>
   <script type="text/javascript">
-    var arr = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    window.onload=function(){
+    var arr = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+    window.onload = function () {
       const divMatrix = createDivMatrix(4, 4);
-      document.body.appendChild(divMatrix);
-			//红子先手1,绿子后手-1
-			var usr = 1; 
-			//棋盘数组，用于计算消子
-			var board = document.getElementById("board");
-			//添加监听，对元素上色
-			board.addEventListener("click",e=>{
-				var target = e.target;
-				if(target.id!="board"){ //确认是否点击了格子
+      document.querySelector("#game_zone").appendChild(divMatrix);
+      //红子先手1,绿子后手-1
+      var usr = 1;
+      //棋盘数组，用于计算消子
+      var board = document.getElementById("board");
+      //添加监听，对元素上色
+      board.addEventListener("click", e => {
+        var target = e.target;
+        if (target.id != "board") { //确认是否点击了格子
           //数组更新
-          let i = target.id.substring(4,5);
-          let j = target.id.substring(6,7);
-          if(arr[i][j]===0){ //判断是否可以落子
+          let i = target.id.substring(4, 5);
+          let j = target.id.substring(6, 7);
+          if (arr[i][j] === 0) { //判断是否可以落子
             arr[i][j] = usr;
             //更新前端页面
             mapMaxtri();
@@ -52,77 +31,91 @@
             let player_block = document.querySelector("#player_block");
             let info = document.querySelector("#info");
             //获取行、列
-            let vectorRow = getArrayRow(arr,i);
-            let vectorCol = getArrayColumn(arr,j);
+            let vectorRow = getArrayRow(arr, i);
+            let vectorCol = getArrayColumn(arr, j);
             //判赢
-            if(checkWin(vectorRow) && checkWin(vectorCol)){
-              info.innerHTML = (usr===1?"红方赢了":"蓝方赢了");
+            if (checkWin(vectorRow) || checkWin(vectorCol)) {
+              info.innerHTML = (usr === 1 ? "红方赢了" : "蓝方赢了");
               player_block.style.display = "none";
-              console.log(usr===1?"红方赢了":"蓝方赢了");
+              console.log(usr === 1 ? "红方赢了" : "蓝方赢了");
             };
             //消子
-            vectorRow = calcBoard(vectorRow,usr);
-            setArrayRow(arr,vectorRow,i);
-            vectorCol = calcBoard(vectorCol,usr);
-            setArrayColumn(arr,vectorCol,j);
+            vectorRow = calcBoard(vectorRow, usr);
+            setArrayRow(arr, vectorRow, i);
+            vectorCol = calcBoard(vectorCol, usr);
+            setArrayColumn(arr, vectorCol, j);
             //界面刷新
             mapMaxtri();
             /** 切换对手 **/
             usr *= -1;
             //提示当前执手方棋子颜色
-            player_block.style.backgroundColor = (usr === 1?"red":"cyan");
-          }else{
+            player_block.style.backgroundColor = (usr === 1 ? "red" : "cyan");
+          } else {
             console.log("已被占用");
           }
-				}
-				console.log(target.id);
+        }
+        console.log(target.id);
       });
     }
-    
+
     //实现元素上色
-    function fillElement(element,usr){
-			if(usr===1){
-				element.style="background-color:red";
-			}else if(usr===-1){
-				element.style="background-color:cyan";
-			}else{
-        element.style="background-color:none";
-			}
+    function fillElement(element, usr) {
+      if (usr === 1) {
+        element.style = "background-color:red";
+      } else if (usr === -1) {
+        element.style = "background-color:cyan";
+      } else {
+        element.style = "background-color:none";
+      }
     }
-    
+
     //根据长度创建矩阵
     function createDivMatrix(rows, cols) {
-      const matrix = document.createElement("div");
+      let matrix = document.createElement("div");
       matrix.id = "board";
+      matrix.className = "middle";
       for (let i = 0; i < rows; i++) {
+        let row = document.createElement("div");
+        row.className = "row center";
         for (let j = 0; j < cols; j++) {
-          const div = document.createElement("div");
+          let div = document.createElement("div");
           div.id = `div-${i}-${j}`;
           div.className = "cell";
-          matrix.appendChild(div);
+          row.append(div);
         }
+        matrix.appendChild(row);
       }
       return matrix;
     }
 
     //投射数组矩阵到div矩阵
-    function mapMaxtri(){
-      for(let i = 0;i<4;i++){
-        for(let j = 0;j<4;j++){
+    function mapMaxtri() {
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
           let id = `#div-${i}-${j}`;
           let div = document.querySelector(id);
-          fillElement(div,arr[i][j]);
+          fillElement(div, arr[i][j]);
         }
       }
     }
-    
+
     //
   </script>
 </head>
-<body style="background-color:none">
-<div style="margin:5%;height:100px;width:400px;background-color:#EFEFEF;">
-<div style="margin-left:20%;width:90px;height:90px;float:left;background-color:none;font-color:black;line-height:90px" id="info">当前执手</div>
-<div style="margin-top:7%;width:50px;height:50px;float:left;background-color:red;border-radius:5px;opacity:0.5" id="player_block"></div>
-</div>
+
+<body style="background-color:none;">
+  <div id="game_root_zone" class="center">
+    <!-- 00将棋盘居中-->
+    <div id="game_zone">
+      <!-- 01定义游戏区域-->
+      <div id="info_zone" class="center middle" style="background-color:#EFEFEF; ">
+        <!-- 02信息提示区-->
+        <div style="width:25%;float:left;line-height:90%" id="info">当前执手</div>
+        <div style="width:12.5%;height:50%;float:left;background-color:red;border-radius:10%;opacity:0.5"
+          id="player_block"></div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
