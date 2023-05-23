@@ -14,10 +14,11 @@
       document.querySelector("#game_zone").appendChild(divMatrix);
       //红子先手1,绿子后手-1
       var usr = 1;
-      //棋盘数组，用于计算消子
+      //棋子矩阵的DOM
       var board = document.getElementById("board");
       //添加监听，对元素上色
-      board.addEventListener("click", e => {
+      board.addEventListener("click", perform); 
+      function perform(e){
         var target = e.target;
         if (target.id != "board") { //确认是否点击了格子
           //数组更新
@@ -37,6 +38,8 @@
             if (checkWin(vectorRow) || checkWin(vectorCol)) {
               info.innerHTML = (usr === 1 ? "红方赢了" : "蓝方赢了");
               player_block.style.display = "none";
+              //游戏结束
+              board.removeEventListener("click",perform);
               console.log(usr === 1 ? "红方赢了" : "蓝方赢了");
             };
             //消子
@@ -55,7 +58,7 @@
           }
         }
         console.log(target.id);
-      });
+      }
     }
 
     //实现元素上色
