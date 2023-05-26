@@ -26,8 +26,6 @@
           let j = target.id.substring(6, 7);
           if (arr[i][j] === 0) { //判断是否可以落子
             arr[i][j] = usr;
-            //更新前端页面
-            mapMaxtri();
             //获取提示区DOM
             let player_block = document.querySelector("#player_block");
             let info = document.querySelector("#info");
