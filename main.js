@@ -49,9 +49,38 @@ function removeOtherPlayer(vec, player) {
   return vec;
 }
 
-function checkWin(vec){
-  let sumVec = vec[0]+vec[1]+vec[2]+vec[3];
-  return Math.abs(sumVec) === 4;
+//检查是否已出现赢方、和棋
+function checkWin(arr,player,i,j){
+    let status = {'isGameEnd':false,'winner':null}
+    let board = sumChess(arr);
+    if(board.former + board.later === 16){
+        status.isGameEnd = true;
+        status.winner = (board.former > board.later ? 1 : (board.former < board.later ? -1 : null));
+    }else{
+        let rowVec = getArrayRow(arr,i);
+        let colVec = getArrayColumn(arr,j);
+        let sumRowVec = rowVec[0]+rowVec[1]+rowVec[2]+rowVec[3];
+        let sumColVec = colVec[0]+colVec[1]+colVec[2]+colVec[3];
+        //三元表达式判断是否出现一条吕
+        status.isGameEnd = Math.abs(sumRowVec) === 4 || Math.abs(sumColVec) === 4;
+        status.winner = player;
+    }
+    return status;
+}
+
+//计数红蓝子个数
+function sumChess(arr){
+    let redChess = 0;
+    let cyanChess = 0;
+    for(row in arr){
+        for(col in arr[row]){
+            if(arr[row][col] === 1)
+                redChess++;
+            else if(arr[row][col] === -1)
+                cyanChess++;
+        }
+    }
+    return {'former':redChess,'later':cyanChess};
 }
 
 function getArrayRow(arr, row) {
@@ -96,3 +125,4 @@ function getChessNumber(vec){
   }
   return chessNumber;
 }
+

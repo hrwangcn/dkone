@@ -32,19 +32,18 @@
             //获取行、列
             let vectorRow = getArrayRow(arr, i);
             let vectorCol = getArrayColumn(arr, j);
-            //判赢
-            if (checkWin(vectorRow) || checkWin(vectorCol)) {
-              info.innerHTML = (usr === 1 ? "红方赢了" : "蓝方赢了");
-              player_block.style.display = "none";
-              //游戏结束
-              board.removeEventListener("click",perform);
-              console.log(usr === 1 ? "红方赢了" : "蓝方赢了");
-            };
             //消子
             vectorRow = calcBoard(vectorRow, usr);
             setArrayRow(arr, vectorRow, i);
             vectorCol = calcBoard(vectorCol, usr);
             setArrayColumn(arr, vectorCol, j);
+            //判赢
+            let status = checkWin(arr,usr,i,j);
+            if (status.isGameEnd) {
+              player_block.style.display = "none";
+              board.removeEventListener("click",perform);
+              info.innerHTML = (status.winner === 1 ? "红方赢了" : (status.winner === -1 ? "蓝方赢了" : "天下大同"));
+            };
             //界面刷新
             mapMaxtri();
             /** 切换对手 **/
@@ -55,7 +54,6 @@
             console.log("已被占用");
           }
         }
-        console.log(target.id);
       }
     }
 
