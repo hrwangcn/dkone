@@ -25,7 +25,7 @@
           //数组更新
           let i = target.id.substring(4, 5);
           let j = target.id.substring(6, 7);
-          if (arr[i][j] === 0) { //判断是否可以落子
+          if (!arr[i][j]) { //判断是否可以落子
             arr[i][j] = usr;
             //获取提示区DOM
             let player_block = document.querySelector("#player_block");
