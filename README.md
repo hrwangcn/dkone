@@ -1,7 +1,7 @@
 ## 一个简单的双人对弈游戏
 
 ### 体验主页 
-[点我跳转](https://hrwangcn.github.io/dkone/dkone.html)
+[点我跳转](https://hrwangcn.gitee.io/dkone/dkone.html)
 
 ### 游戏规则
 + 双人对弈，棋盘规格为4×4格局，先占满一行或者一列者赢
