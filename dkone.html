@@ -33,7 +33,7 @@
             let ret = calcBoard(arr, i, j);
             //消子
             arr  = ret.arr;
-            prompts.forEach(prompt => {
+            ret.prompts.forEach(prompt => {
                 prompt != null &&
                 console.log(prompt);
             });
