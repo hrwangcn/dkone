@@ -33,7 +33,11 @@
             let ret = calcBoard(arr, i, j);
             //消子
             arr  = ret.arr;
-            console.log(ret.prompts);
+            prompts.forEach(prompt => {
+                prompt != null &&
+                console.log(prompt);
+            });
+            //console.log(ret.prompts);
             //判赢
             let status = checkWin(arr,usr,i,j);
             if (status.isGameEnd) {
