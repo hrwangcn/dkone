@@ -14,9 +14,12 @@
       const divMatrix = createDivMatrix(4, 4);
       document.querySelector("#game_zone").appendChild(divMatrix);
       //红子先手1,绿子后手-1
-      var usr = 1;
+      let usr = 1;
       //棋子矩阵的DOM
-      var board = document.getElementById("board");
+      let board = document.querySelector("#board");
+      //获取提示区DOM
+      let player_block = document.querySelector("#player_block");
+      let info = document.querySelector("#info");
       //添加监听，对元素上色
       board.addEventListener("click", perform); 
       function perform(e){
@@ -27,17 +30,10 @@
           let j = target.id.substring(6, 7);
           if (!arr[i][j]) { //判断是否可以落子
             arr[i][j] = usr;
-            //获取提示区DOM
-            let player_block = document.querySelector("#player_block");
-            let info = document.querySelector("#info");
-            //获取行、列
-            let vectorRow = getArrayRow(arr, i);
-            let vectorCol = getArrayColumn(arr, j);
+            let ret = calcBoard(arr, i, j);
             //消子
-            vectorRow = calcBoard(vectorRow, usr);
-            setArrayRow(arr, vectorRow, i);
-            vectorCol = calcBoard(vectorCol, usr);
-            setArrayColumn(arr, vectorCol, j);
+            arr  = ret.arr;
+            console.log(ret.prompts);
             //判赢
             let status = checkWin(arr,usr,i,j);
             if (status.isGameEnd) {
@@ -99,7 +95,6 @@
       }
     }
 
-    //
   </script>
 </head>
 
