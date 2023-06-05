@@ -9,6 +9,9 @@
   <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico?">
   <script src="main.js"></script>
   <script type="text/javascript">
+    //游戏结束的提示信息
+    let gameEndInfo = ["蓝方赢了","天下大同","红方赢了"];
+    //棋盘初始化
     var arr = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
     window.onload = function () {
       const divMatrix = createDivMatrix(4, 4);
@@ -20,8 +23,10 @@
       //获取提示区DOM
       let player_block = document.querySelector("#player_block");
       let info = document.querySelector("#info");
-      //添加监听，对元素上色
+      //添加监听
       board.addEventListener("click", perform); 
+
+      //点击响应
       function perform(e){
         var target = e.target;
         if (target.id != "board") { //确认是否点击了格子
@@ -30,22 +35,19 @@
           let j = target.id.substring(6, 7);
           if (!arr[i][j]) { //判断是否可以落子
             arr[i][j] = usr;
-            let ret = calcBoard(arr, i, j);
             //消子
-            arr  = ret.arr;
-            ret.prompts.forEach(prompt => {
-                prompt != null &&  showAlert(prompt,usr==1?"former":"later");
+            let resultBoard = calcBoard(arr, i, j);
+            resultBoard.prompts.forEach(prompt => {
+                prompt != null && showAlert(prompt,usr==1?"former":"later");
             });
+            //消子后的数据回填给数组
+            arr  = resultBoard.arr;
             //判赢
             let status = checkWin(arr,usr,i,j);
-            if (status.isGameEnd) {
-              player_block.style.display = "none";
-              board.removeEventListener("click",perform);
-              info.innerHTML = (status.winner === 1 ? "红方赢了" : (status.winner === -1 ? "蓝方赢了" : "天下大同"));
-            };
+            status.isGameEnd && gameEndPerform(status);
             //界面刷新
             mapMaxtri();
-            /** 切换对手 **/
+            //切换对手
             usr *= -1;
             //提示当前执手方棋子颜色
             player_block.style.backgroundColor = (usr === 1 ? "red" : "cyan");
@@ -54,17 +56,20 @@
           }
         }
       }
+      
+      //游戏结束，更新前端页面
+      function gameEndPerform(status){
+          player_block.style.display = "none";
+          board.removeEventListener("click",perform);
+          info.innerHTML = gameEndInfo[status.winner + 1];
+      }
+
     }
 
     //实现元素上色
     function fillElement(element, usr) {
-      if (usr === 1) {
-        element.style = "background-color:red";
-      } else if (usr === -1) {
-        element.style = "background-color:cyan";
-      } else {
-        element.style = "background-color:none";
-      }
+      let color = ['cyan','none','red'];
+      element.style = 'background-color:'+color[usr+1];
     }
 
     //根据长度创建矩阵
