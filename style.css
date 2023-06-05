@@ -69,3 +69,32 @@
   align-items: center;
   justify-content: center;
 }
+
+/*提示容器,居右*/
+#alert-container {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+}
+
+/*消子提示*/
+.alert {
+  background-color: #ffffff;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.alert-normal {
+  color: #000000;
+}
+
+.alert-former {
+  color: red;
+}
+
+.alert-later {
+  color: cyan;
+}
+
+

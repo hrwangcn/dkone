@@ -45,9 +45,9 @@ function calcVec(vec, player) {
         vec = removeOtherPlayer(vec, player);
     }
   } else if (chessNumber === 4) {
-    if (playerChessNumber === 2) { //两颊沟、两撑乎、二顶二
-      if (vec[0] === player && vec[3] === player) {//两颊沟
-        prompt = "两颊沟";
+    if (playerChessNumber === 2) { //两夹沟、两撑乎、二顶二
+      if (vec[0] === player && vec[3] === player) {//两夹沟
+        prompt = "两夹沟";
         vec = removeOtherPlayer(vec, player);
       } else if (vec[0] === vec[3] && vec[0] != player) {//两撑乎
         prompt = "两撑乎";
@@ -152,4 +152,5 @@ function getChessNumber(vec){
   }
   return chessNumber;
 }
+
 
