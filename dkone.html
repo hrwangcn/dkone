@@ -46,7 +46,7 @@
             let status = checkWin(arr,usr,i,j);
             status.isGameEnd && gameEndPerform(status);
             //界面刷新
-            mapMaxtri();
+            mapMatrix();
             //切换对手
             usr *= -1;
             //提示当前执手方棋子颜色
@@ -92,7 +92,7 @@
     }
 
     //投射数组矩阵到div矩阵
-    function mapMaxtri() {
+    function mapMatrix() {
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
           let id = `#div-${i}-${j}`;
