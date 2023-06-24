@@ -10,11 +10,11 @@
 
 
 ### 消子规则 
-+ 二顶一：同一直线上有且仅有1枚敌子、2枚执手方子，敌子与任意执手方子相邻，但不同时相邻，图中任意一颗红子为落子，蓝子右侧为空位，则构成吃子，蓝子消子。<br><img src="./md-img/erdingyi.png" alt="二顶一" style="zoom:50%;" />
-+ 一撑乎：执手方子与2枚敌子相邻，且同一直线上再无棋子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yichenghu.png" alt="一撑乎" style="zoom:50%;" />
-+ 一夹沟：敌子与2枚执手方子相邻，且同一直线上再无其它棋子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yijiagou.png" alt="一夹沟" style="zoom:50%;" />
-+ 两夹沟：执手子与己方棋子在同一直线上间隔2枚敌子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/liangjiagou.png" alt="两夹沟" style="zoom:50%;" />
-+ 两撑乎：执手子与己方1子相邻，且位于2枚敌子中间，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/liangchenghu.png" alt="两撑乎" style="zoom:50%;" />
-+ 一串三：在执手子所在的行或者列上存在连续3个敌子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yichuansan.png" alt="一串三" style="zoom:50%;" />
++ 二顶一：同一直线上有且仅有1枚敌子、2枚执手方子，敌子与任意执手方子相邻，但不同时相邻，图中任意一颗红子为落子，蓝子右侧为空位，则构成吃子，蓝子消子。<br><img src="./md-img/erdingyi.gif" alt="二顶一" style="zoom:50%;" />
++ 一撑乎：执手方子与2枚敌子相邻，且同一直线上再无棋子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yichenghu.gif" alt="一撑乎" style="zoom:50%;" />
++ 一夹沟：敌子与2枚执手方子相邻，且同一直线上再无其它棋子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yijiagou.gif" alt="一夹沟" style="zoom:50%;" />
++ 两夹沟：执手子与己方棋子在同一直线上间隔2枚敌子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/liangjiagou.gif" alt="两夹沟" style="zoom:50%;" />
++ 两撑乎：执手子与己方1子相邻，且位于2枚敌子中间，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/liangchenghu.gif" alt="两撑乎" style="zoom:50%;" />
++ 一串三：在执手子所在的行或者列上存在连续3个敌子，如下图，红子为落子，则蓝子被吃子<br><img src="./md-img/yichuansan.gif" alt="一串三" style="zoom:50%;" />
 + 行和列可以同时消子。
 
