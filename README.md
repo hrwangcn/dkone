@@ -1,4 +1,4 @@
-## 一个简单的双人对弈游戏
+## dkone 一个简单的双人对弈游戏
 
 ### 体验主页 
 [点我跳转](https://hrwangcn.github.io/dkone)
