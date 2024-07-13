@@ -20,7 +20,7 @@ body {
 
 #info {
     margin: 2vw;
-    font-size: 2vw;
+    font-size: 3vh;
 }
 
 table {
@@ -28,8 +28,8 @@ table {
 }
 
 td {
-    border: 1px solid #797878;
-    background-color: #f4d76d;
+    border: 1px solid #6f6f6f;
+    background-color: #ffda62;
 }
 
 .black {
@@ -49,10 +49,11 @@ td {
 
 /*消子提示*/
 .alert {
-    background-color: #ffffff;
     padding: 10px;
+    font-size: 3vh;
     margin-top: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    background-color: #6f6f6f;
+    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.6);
 }
 
 .alert-black {
@@ -60,6 +61,5 @@ td {
 }
 
 .alert-white {
-    background-color: #000000;
     color: white;
 }
