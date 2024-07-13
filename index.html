@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>dkone</title>
+    <link rel='stylesheet' href='style.css' type='text/css'>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico?">
+    <script src="./game.js"></script>
+    <script>
+        let game = new Game();
+
+        window.onload = main;
+
+        function main() {
+            game.start();
+            updateUI(game);
+            document.getElementById("board").addEventListener("click", e => {
+                let action = game.getAction({ target: parseInt(e.target.id) });
+                game.excute(action);
+                updateUI(game);
+                showAlert(game);
+            });
+        }
+
+        //更新页面提示信息
+        function updateUI(game) {
+            let info = document.getElementById("info");
+            let player = game.getCurrentPlayer();
+            let playerName = '';
+            switch (player.type) {
+                case Player.BLACK: playerName = "黑棋"; break;
+                case Player.WHITE: playerName = "白棋"; break;
+            }
+            game.board.forEach((type, location) => {
+                let cell = document.getElementById(location);
+                let className = '';
+                switch (type) {
+                    case Player.BLACK: className = "black"; break;
+                    case Player.WHITE: className = "white"; break;
+                }
+                cell.className = className;
+            });
+            if (game.winner) {
+                let winner = game.winner;
+                let winnerName = '';
+                switch (winner.type) {
+                    case Player.BLACK: winnerName = "黑棋"; break;
+                    case Player.WHITE: winnerName = "白棋"; break;
+                }
+                info.innerHTML = `${winnerName}赢了!`;
+            } else if (game.status === Game.TIE) {
+                info.innerHTML = "平局!";
+            } else {
+                info.innerHTML = `${playerName}下棋`;
+            }
+        }
+
+        //提示消字信息
+        function showAlert(game) {
+            if (game.items.length > 0) {
+                let type = -game.getCurrentPlayer().type === 1 ? 'black' : 'white';
+                game.items.every(item => {
+                    let message = document.createElement('div');
+                    message.classList.add('alert', `alert-${type}`);
+                    message.innerText = item;
+                    document.getElementById('toast').appendChild(message);
+                    setTimeout(() => {
+                        message.remove();
+                    }, 1500);
+                });
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="info"></div>
+    <div id="toast"></div>
+    <table id="board">
+        <tr>
+            <td id="0"></td>
+            <td id="1"></td>
+            <td id="2"></td>
+            <td id="3"></td>
+        </tr>
+        <tr>
+            <td id="4"></td>
+            <td id="5"></td>
+            <td id="6"></td>
+            <td id="7"></td>
+        </tr>
+        <tr>
+            <td id="8"></td>
+            <td id="9"></td>
+            <td id="10"></td>
+            <td id="11"></td>
+        </tr>
+        <tr>
+            <td id="12"></td>
+            <td id="13"></td>
+            <td id="14"></td>
+            <td id="15"></td>
+        </tr>
+    </table>
+</body>
+
+</html>

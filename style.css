@@ -1,100 +1,65 @@
-/*小屏幕手机端*/
-@media (min-width:0px) and (max-width:768px) {
-  #board {
-    opacity: 0.5;
-    height: 300px;
-  }
-
-  #info_zone {
-    height: 75px;
-  }
-
-  .middle {
-    width: 300px;
-  }
+@media (min-width:0px) and (max-width: 980px) {
+    table {
+        width: 90vw;
+        height: 90vw;
+    }
 }
 
-/*中等屏幕，桌面显示器，大于等于992px*/
-@media (min-width:768px) and (max-width:992px) {
-  #board {
-    opacity: 0.5;
-    height: 400px;
-  }
-  
-  #info_zone {
-    height: 100px;
-  }
-  
-  .middle {
-    width: 400px;
-  }
+@media (min-width:981px) {
+    table {
+        width: 40vw;
+        height: 40vw;
+    }
 }
 
-/*大屏设备*/
-@media (min-width:992px) {
-  #board {
-    opacity: 0.5;
-    height: 500px;
-  }
-
-  #info_zone {
-    height: 125px;
-  }
-
-  .middle {
-    width: 500px;
-  }
+body {
+    margin: 0;
+    display: grid;
+    place-items: center;
 }
 
-.cell {
-  margin: 0.25%;
-  border: 4px;
-  border-radius: 10%;
-  border-style: solid;
-  border-color: gray;
-  height: 100%;
-  width: 22.5%;
-  float: left;
+#info {
+    margin: 2vw;
+    font-size: 2vw;
 }
 
-.row {
-  margin: 2.5% 2.5% 0 0;
-  width: inherit;
-  height: 25%;
+table {
+    border-collapse: collapse;
 }
 
-/*子元素在父元素中居中，center类为父元素*/
-.center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+td {
+    border: 1px solid #797878;
+    background-color: #f4d76d;
+}
+
+.black {
+    background-color: #000000;
+}
+
+.white {
+    background-color: #FFFFFF;
 }
 
 /*提示容器,居右*/
-#alert-container {
-  position: fixed;
-  left: 20px;
-  top: 20px;
+#toast {
+    position: fixed;
+    left: 20px;
+    top: 20px;
 }
 
 /*消子提示*/
 .alert {
-  background-color: #ffffff;
-  padding: 10px;
-  margin-top: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    background-color: #ffffff;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.alert-normal {
-  color: #000000;
+.alert-black {
+    color: black;
 }
 
-.alert-former {
-  color: red;
+.alert-white {
+    background-color: #000000;
+    color: white;
 }
-
-.alert-later {
-  color: cyan;
-}
-
-
