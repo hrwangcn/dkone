@@ -52,14 +52,6 @@ td {
     padding: 10px;
     font-size: 3vh;
     margin-top: 10px;
-    background-color: #6f6f6f;
+    background-color: rgba(205, 205, 205, 0.2);
     box-shadow: 0 0 1vh rgba(0, 0, 0, 0.6);
-}
-
-.alert-black {
-    color: black;
-}
-
-.alert-white {
-    color: white;
 }

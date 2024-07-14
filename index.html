@@ -57,20 +57,17 @@
             }
         }
 
-        //提示消字信息
+        //提示消子信息
         function showAlert(game) {
-            if (game.items.length > 0) {
-                let type = -game.getCurrentPlayer().type === 1 ? 'black' : 'white';
-                game.items.every(item => {
-                    let message = document.createElement('div');
-                    message.classList.add('alert', `alert-${type}`);
-                    message.innerText = item;
-                    document.getElementById('toast').appendChild(message);
-                    setTimeout(() => {
-                        message.remove();
-                    }, 1500);
-                });
-            }
+            game.items.forEach(item => {
+                let message = document.createElement('div');
+                message.classList.add('alert');
+                message.innerText = item;
+                document.getElementById('toast').appendChild(message);
+                setTimeout(() => {
+                    message.remove();
+                }, 1500);
+            });
         }
     </script>
 </head>
