@@ -16,7 +16,7 @@ body {
     margin: 0;
     display: grid;
     place-items: center;
-    background-color:#65CB65;
+    background-color: #65CB65;
 }
 
 #info {
@@ -39,6 +39,17 @@ td {
 
 .white {
     background-color: #FFFFFF;
+}
+
+.btns {
+    margin-top: 5vh;
+}
+
+.btn {
+    width: 20vw;
+    height: 8vw;
+    font-size: 3vw;
+    margin: 0 5vw 0 5vw;
 }
 
 /*提示容器,居右*/

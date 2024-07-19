@@ -22,6 +22,20 @@
                 updateUI(game);
                 showAlert(game);
             });
+
+            document.getElementById("restart").addEventListener("click", () => {
+                game = new Game();
+                game.start();
+                updateUI(game);
+            });
+
+            document.getElementById("retract").addEventListener("click", () => {
+                if (game.retract()) {
+                    updateUI(game);
+                } else {
+                    alert("没有可悔棋了");
+                }
+            });
         }
 
         //更新页面提示信息
@@ -101,6 +115,10 @@
             <td id="15"></td>
         </tr>
     </table>
+    <div class="btns">
+        <button id="restart" class="btn">重开</button>
+        <button id="retract" class="btn">悔棋</button>
+    </div>
 </body>
 
 </html>

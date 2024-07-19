@@ -39,6 +39,7 @@ class Game {
             'babo': '一撑乎',
             'obab': '一撑乎',
         };
+        this.history = [];
     }
 
     start() {
@@ -138,6 +139,7 @@ class Game {
 
     excute(action) {
         this.items = [];
+        this.history.push(JSON.stringify(this.board));
         this.board[action.target] = this.getCurrentPlayer().type;
         //吃子
         this.updateBoard(action.target);
@@ -153,6 +155,15 @@ class Game {
                 this.changeCurrentPlayer();
             }
         }
+    }
+
+    retract() {
+        if(this.history.length != 0  && this.status === Game.RUN){
+            this.board = JSON.parse(this.history.pop());
+            this.changeCurrentPlayer();
+            return true;
+        }
+        return false;
     }
 
     findWinner(target) {
