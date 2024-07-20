@@ -3,12 +3,24 @@
         width: 90vw;
         height: 90vw;
     }
+		.btn {
+				width: 20vw;
+				height: 8vw;
+				font-size: 3vw;
+				margin: 0 5vw 0 5vw;
+		}
 }
 
 @media (min-width:981px) {
     table {
         width: 40vw;
         height: 40vw;
+    }
+    .btn {
+				width: 10vw;
+				height: 4vw;
+				font-size: 1.5vw;
+				margin: 0 2.5vw 0 2.5vw;
     }
 }
 
@@ -45,12 +57,6 @@ td {
     margin-top: 5vh;
 }
 
-.btn {
-    width: 20vw;
-    height: 8vw;
-    font-size: 3vw;
-    margin: 0 5vw 0 5vw;
-}
 
 /*提示容器,居右*/
 #toast {
