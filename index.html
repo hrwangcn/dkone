@@ -9,23 +9,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="./game.js"></script>
     <script>
-        let game = new Game();
+        let player1 = new Player(Player.BLACK);
+        let player2 = new Player(Player.WHITE);
+        let game = new Game(player1, player2).start();
 
         window.onload = main;
 
         function main() {
-            game.start();
             updateUI(game);
             document.getElementById("board").addEventListener("click", e => {
-                let action = game.getAction({ target: parseInt(e.target.id) });
+                // let action = game.getAction({ target: parseInt(e.target.id) });
+                let action = game.getCurrentPlayer().getAction(game,
+                    { target: parseInt(e.target.id) });
                 game.excute(action);
                 updateUI(game);
                 showAlert(game);
             });
 
             document.getElementById("restart").addEventListener("click", () => {
-                game = new Game();
-                game.start();
+                game = new Game(player1,player2).start();
                 updateUI(game);
             });
 

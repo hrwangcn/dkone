@@ -4,7 +4,19 @@ class Player {
     static get WHITE() { return -1 };
     constructor(type) {
         this.type = type;
-        this.isMyTurn = type === Player.BLACK ? true : false; //黑子先手
+        this.isMyTurn = false;
+    }
+    getAction(game,option) {
+        //落子
+        if (game.status === Game.RUN) {
+            if (game.board[option.target] === 0) {
+                return new Action(option);
+            } else {
+                throw new Error('Bad target');
+            }
+        } else {
+            throw new Error('Not start');
+        }
     }
 }
 
@@ -19,8 +31,8 @@ class Game {
     static get RUN() { return 1 }
     static get WIN() { return 2 }
     static get TIE() { return 3 }
-    constructor() {
-        this.players = [new Player(Player.BLACK), new Player(Player.WHITE)];
+    constructor(player1, player2) {
+        this.players = [player1, player2];
         this.winner = null;
         this.items = [];
         this.cases = {
@@ -44,7 +56,10 @@ class Game {
 
     start() {
         this.status = Game.RUN;
+        this.players[0].isMyTurn = true;
+        this.players[1].isMyTurn = false;
         this.board = new Array(16).fill(0);
+        return this;
     }
 
     getPlayerByType(type) {
@@ -121,19 +136,6 @@ class Game {
                 return item === playerType ? item : 0;
             }), target);
             this.items.push(this.cases[colString]);
-        }
-    }
-
-    getAction(option) {
-        //落子
-        if (this.status === Game.RUN) {
-            if (this.board[option.target] === 0) {
-                return new Action(option);
-            } else {
-                throw new Error('Bad target');
-            }
-        } else {
-            throw new Error('Not start');
         }
     }
 
