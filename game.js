@@ -2,8 +2,9 @@ class Player {
     static get BLACK() { return 1 };
     static get EMPTY() { return 0 };
     static get WHITE() { return -1 };
-    constructor(type) {
+    constructor(type,isAI) {
         this.type = type;
+        this.isAI = isAI;
         this.isMyTurn = false;
     }
     getAction(game,option) {
