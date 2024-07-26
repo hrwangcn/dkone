@@ -8,7 +8,9 @@ class Player {
         this.isMyTurn = false;
     }
     getAction(game,option) {
-        //落子
+        if(this.isAI){
+            //进行MCTS并返回Action
+        }
         if (game.status === Game.RUN) {
             if (game.board[option.target] === 0) {
                 return new Action(option);
