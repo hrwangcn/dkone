@@ -10,7 +10,10 @@
     <script src="./game.js"></script>
     <script>
         let player1 = new Player(Player.BLACK,false);
-        let player2 = new Player(Player.WHITE,false);
+        //Play with your friend face to face, not online
+        //let player2 = new Player(Player.WHITE,false);
+        //Play with AI mode, human first
+        let player2 = new Player(Player.WHITE,true);
         let game = new Game(player1, player2).start();
 
         window.onload = main;
@@ -30,8 +33,12 @@
                 //AI对战情况
                 if(game.getCurrentPlayer().isAI){
                     game.excute(game.getCurrentPlayer().getAction(game));
-                    updateUI(game);
-                    showAlert(game);
+                    setTimeout(
+											()=>{
+												updateUI(game);
+												showAlert(game);
+											},600
+                    );
                 }
             });
 

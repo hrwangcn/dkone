@@ -7,9 +7,11 @@ class Player {
         this.isAI = isAI;
         this.isMyTurn = false;
     }
-    getAction(game,option) {
-        if(this.isAI){
-            //进行MCTS并返回Action
+    getAction(game, option) {
+        if (this.isAI) {
+            // 使用 Alpha-Beta 剪枝优化 Minimax 算法
+            let bestMove = this.alphaBeta(game, 6, -Infinity, Infinity, true).move;
+            return new Action({ target: bestMove });
         }
         if (game.status === Game.RUN) {
             if (game.board[option.target] === 0) {
@@ -20,6 +22,92 @@ class Player {
         } else {
             throw new Error('Not start');
         }
+    }
+
+    alphaBeta(game, depth, alpha, beta, isMaximizing) {
+        // 检查游戏是否结束或达到最大深度
+        if (game.status === Game.WIN || game.status === Game.TIE || depth === 0) {
+						//game.retract();
+						//console.log('Found root!');
+						console.log();
+            return { score: this.evaluate(game), move: null };
+        }
+
+        let bestMove = null;
+        let bestScore = isMaximizing ? -Infinity : Infinity;
+
+        // 遍历所有可能的落子位置
+        for (let i = 0; i < game.board.length; i++) {
+            if (game.board[i] === Player.EMPTY) {
+                // 克隆 game 对象
+                let clonedGame = game.clone();
+                // 在克隆对象上模拟落子
+                let action = new Action({ target: i });
+                clonedGame.excute(action);
+                let result = this.alphaBeta(clonedGame, depth - 1, alpha, beta, !isMaximizing);
+                //clonedGame.retract();
+
+                // 更新最佳分数和落子位置
+                if (isMaximizing) {
+                    if (result.score > bestScore) {
+                        bestScore = result.score;
+                        bestMove = i;
+                    }
+                    alpha = Math.max(alpha, bestScore);
+                } else {
+                    if (result.score < bestScore) {
+                        bestScore = result.score;
+                        bestMove = i;
+                    }
+                    beta = Math.min(beta, bestScore);
+                }
+
+                // Alpha-Beta 剪枝
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+        }
+
+        return { score: bestScore, move: bestMove };
+    }
+
+    evaluate(game) {
+        // 评估函数：根据当前棋盘状态计算分数
+        let score = 0;
+
+        // 检查行和列是否有潜在的优势
+        for (let i = 0; i < 4; i++) {
+            let row = game.getRow(i * 4);
+            let col = game.getColumn(i);
+            score += this.evaluateLine(row);
+            score += this.evaluateLine(col);
+        }
+
+        return score;
+    }
+
+    evaluateLine(line) {
+        // 评估一行或一列的分数
+        let score = 0;
+        let playerCount = line.filter(cell => cell === this.type).length;
+        let opponentCount = line.filter(cell => cell === -this.type).length;
+
+        if (playerCount === 4) {
+            score += 100; // 玩家获胜
+        } else if (opponentCount === 4) {
+            score -= 100; // 对手获胜
+        } else if (playerCount === 3 && opponentCount === 0) {
+            score += 50; // 玩家有潜在获胜机会
+        } else if (opponentCount === 3 && playerCount === 0) {
+            score -= 50; // 对手有潜在获胜机会
+        } else if (playerCount === 2 && opponentCount === 0) {
+            score += 10; // 玩家有潜在优势
+        } else if (opponentCount === 2 && playerCount === 0) {
+            score -= 10; // 对手有潜在优势
+        }
+
+        return score;
     }
 }
 
@@ -187,5 +275,24 @@ class Game {
                 return this.getPlayerByType(Player.WHITE);
             }
         }
+    }
+
+		//深层拷贝对象
+    clone() {
+        let clonedGame = new Game(this.players[0], this.players[1]);
+        clonedGame.status = this.status;
+        clonedGame.winner = this.winner;
+        clonedGame.board = [...this.board]; // 克隆棋盘
+        clonedGame.items = [...this.items]; // 克隆消子记录
+        clonedGame.history = [...this.history]; // 克隆历史记录
+
+        // 深拷贝 players 数组
+        clonedGame.players = this.players.map(player => {
+            let clonedPlayer = new Player(player.type, player.isAI);
+            clonedPlayer.isMyTurn = player.isMyTurn;
+            return clonedPlayer;
+        });
+
+        return clonedGame;
     }
 }
