@@ -27,9 +27,6 @@ class Player {
     alphaBeta(game, depth, alpha, beta, isMaximizing) {
         // 检查游戏是否结束或达到最大深度
         if (game.status === Game.WIN || game.status === Game.TIE || depth === 0) {
-						//game.retract();
-						//console.log('Found root!');
-						console.log();
             return { score: this.evaluate(game), move: null };
         }
 
@@ -45,7 +42,6 @@ class Player {
                 let action = new Action({ target: i });
                 clonedGame.excute(action);
                 let result = this.alphaBeta(clonedGame, depth - 1, alpha, beta, !isMaximizing);
-                //clonedGame.retract();
 
                 // 更新最佳分数和落子位置
                 if (isMaximizing) {
@@ -122,11 +118,8 @@ class Game {
     static get RUN() { return 1 }
     static get WIN() { return 2 }
     static get TIE() { return 3 }
-    constructor(player1, player2) {
-        this.players = [player1, player2];
-        this.winner = null;
-        this.items = [];
-        this.cases = {
+    static get cases() {
+			return {
             'aabo': '二顶一',
             'obaa': '二顶一',
             'oaab': '二顶一',
@@ -142,6 +135,11 @@ class Game {
             'babo': '一撑乎',
             'obab': '一撑乎',
         };
+    }
+    constructor(player1, player2) {
+        this.players = [player1, player2];
+        this.winner = null;
+        this.items = [];
         this.history = [];
     }
 
@@ -216,17 +214,17 @@ class Game {
         let rowString = this.getCharacterString(row);
         let colString = this.getCharacterString(col);
         let playerType = this.getCurrentPlayer().type;
-        if (this.cases[rowString]) {
+        if (Game.cases[rowString]) {
             this.setRow(row.map(item => {
                 return item === playerType ? item : 0;
             }), target);
-            this.items.push(this.cases[rowString]);
+            this.items.push(Game.cases[rowString]);
         }
-        if (this.cases[colString]) {
+        if (Game.cases[colString]) {
             this.setColumn(col.map(item => {
                 return item === playerType ? item : 0;
             }), target);
-            this.items.push(this.cases[colString]);
+            this.items.push(Game.cases[colString]);
         }
     }
 
