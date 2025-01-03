@@ -1,62 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <title>dkone</title>
-    <link rel='stylesheet' href='style.css' type='text/css'>
-    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico?">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Two Kill One!</title>
+    <link rel="stylesheet" href="style.css">
     <script src="./game.js"></script>
     <script>
-        let player1 = new Player(Player.BLACK,false);
-        //Play with your friend face to face, not online
-        //let player2 = new Player(Player.WHITE,false);
-        //Play with AI mode, human first
-        let player2 = new Player(Player.WHITE,true);
+        let player1 = new Player(Player.BLACK, false);
+        let player2 = new Player(Player.WHITE, true); // AI 玩家
         let game = new Game(player1, player2).start();
 
         window.onload = main;
 
-        function main() {
-            updateUI(game);
-            //AI先手情况
-            if(game.getCurrentPlayer().isAI){
-                game.excute(game.getCurrentPlayer().getAction(game));
-            }
-            document.getElementById("board").addEventListener("click", e => {
-                let action = game.getCurrentPlayer().getAction(game,
-                    { target: parseInt(e.target.id) });
-                game.excute(action);
-                updateUI(game);
-                showAlert(game);
-                //AI对战情况
-                if(game.getCurrentPlayer().isAI){
-                    game.excute(game.getCurrentPlayer().getAction(game));
-                    setTimeout(
-											()=>{
+				function main() {
+						updateUI(game);
+						if (game.getCurrentPlayer().isAI) {
+								setTimeout(() => {
+										game.excute(game.getCurrentPlayer().getAction(game));
+										updateUI(game);
+										showAlert(game);
+								}, 800);
+						}
+						document.getElementById("board").addEventListener("click", e => {
+								let action = game.getCurrentPlayer().getAction(game, { target: parseInt(e.target.id) });
+								game.excute(action);
+								updateUI(game);
+								showAlert(game);
+								if (game.getCurrentPlayer().isAI) {
+										setTimeout(() => {
+												game.excute(game.getCurrentPlayer().getAction(game));
 												updateUI(game);
 												showAlert(game);
-											},600
-                    );
-                }
-            });
+										}, 800);
+								}
+						});
 
-            document.getElementById("restart").addEventListener("click", () => {
-                game = new Game(player1,player2).start();
-                updateUI(game);
-            });
+						document.getElementById("restart").addEventListener("click", () => {
+								game = new Game(player1, player2).start();
+								updateUI(game);
+						});
 
-            document.getElementById("retract").addEventListener("click", () => {
-                if (game.retract()) {
-                    updateUI(game);
-                } else {
-                    alert("没有可悔棋了");
-                }
-            });
-        }
+						document.getElementById("retract").addEventListener("click", () => {
+								if (game.retract()) {
+										updateUI(game);
+								} else {
+										alert("没有可悔棋了");
+								}
+						});
+				}
 
-        //更新页面提示信息
         function updateUI(game) {
             let info = document.getElementById("info");
             let player = game.getCurrentPlayer();
@@ -65,19 +57,18 @@
                 case Player.BLACK: playerName = "黑棋"; break;
                 case Player.WHITE: playerName = "白棋"; break;
             }
-            game.board.forEach((type, location) => {
-                let cell = document.getElementById(location);
+            for (let i = 0; i < game.board.getSize() * game.board.getSize(); i++) {
+                let cell = document.getElementById(i);
                 let className = '';
-                switch (type) {
+                switch (game.board.getCell(i)) {
                     case Player.BLACK: className = "black"; break;
                     case Player.WHITE: className = "white"; break;
                 }
                 cell.className = className;
-            });
+            }
             if (game.winner) {
-                let winner = game.winner;
                 let winnerName = '';
-                switch (winner.type) {
+                switch (game.winner.type) {
                     case Player.BLACK: winnerName = "黑棋"; break;
                     case Player.WHITE: winnerName = "白棋"; break;
                 }
@@ -89,7 +80,6 @@
             }
         }
 
-        //提示消子信息
         function showAlert(game) {
             game.items.forEach(item => {
                 let message = document.createElement('div');
@@ -103,7 +93,6 @@
         }
     </script>
 </head>
-
 <body>
     <div id="info"></div>
     <div id="toast"></div>
@@ -138,5 +127,4 @@
         <button id="retract" class="btn">悔棋</button>
     </div>
 </body>
-
 </html>
