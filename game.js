@@ -72,6 +72,28 @@ class Player {
             score += this.evaluateLine(row);
             score += this.evaluateLine(col);
         }
+        score += this.evaluateSituation(game);
+        return score;
+    }
+
+    evaluateSituation(game) {
+        let score = 0;
+        if (
+            game.hasSituation("obbbbcccbcccbccc") ||
+            game.hasSituation("bbbocccbcccbcccb") ||
+            game.hasSituation("bcccbcccbcccobbb") ||
+            game.hasSituation("cccbcccbcccbbbbo")
+        ) {
+            score += 60;
+        }
+        if (
+            game.hasSituation("obbbcccccccccccc") ||
+            game.hasSituation("ccccobbbcccccccc") ||
+            game.hasSituation("bcccbcccbcccobbb") ||
+            game.hasSituation("cccbcccbcccbbbbo")
+        ) {
+            score += 30;
+        }
         return score;
     }
 
@@ -81,9 +103,9 @@ class Player {
         let opponentCount = line.filter(cell => cell === -this.type).length;
 
         if (playerCount === 4) {
-            score += 100;
+            score += 1000;
         } else if (opponentCount === 4) {
-            score -= 100;
+            score -= 1000;
         } else if (playerCount === 3 && opponentCount === 0) {
             score += 50;
         } else if (opponentCount === 3 && playerCount === 0) {
@@ -244,7 +266,7 @@ class Game {
             throw new Error('Pattern length must be equal to board size');
         } else {
             let kernel = [];
-            for (let i=0; i<pattern.length; i++) {
+            for (let i = 0; i < pattern.length; i++) {
                 switch (pattern[i]) {
                     case 'a':
                         kernel.push(this.getCurrentPlayer().type);
