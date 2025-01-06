@@ -239,6 +239,31 @@ class Game {
         }
     }
 
+    hasSituation(pattern) {
+        if (pattern.length !== this.board.grid.length) {
+            throw new Error('Pattern length must be equal to board size');
+        } else {
+            let kernel = [];
+            for (let i=0; i<pattern.length; i++) {
+                switch (pattern[i]) {
+                    case 'a':
+                        kernel.push(this.getCurrentPlayer().type);
+                        break;
+                    case 'b':
+                        kernel.push(-this.getCurrentPlayer().type);
+                        break;
+                    case 'o':
+                        kernel.push(0);
+                        break;
+                    case 'c':
+                        kernel.push(-2);
+                        break;
+                }
+            }
+            return this.board.hasStruct(kernel);
+        }
+    }
+
     // 深层克隆方法
     clone() {
         let clonedGame = new Game(this.players[0], this.players[1]);
@@ -322,14 +347,14 @@ class Board {
     }
 
     // 检查是否存在某种结构
-    hasStruct(pattern) {
-        if (pattern.length !== this.size * this.size) {
-            throw new Error('Invalid pattern length');
+    hasStruct(kernel) {
+        if (kernel.length !== this.size * this.size) {
+            throw new Error('Invalid kernel length');
         } else {
             let result = true;
             for (let i = 0; i < this.size * this.size; i++) {
-                if (pattern[i] !== -2) {
-                    result = result && pattern[i] === this.getCell(i);
+                if (kernel[i] !== -2) {
+                    result = result && kernel[i] === this.getCell(i);
                 }
             }
             return result;
