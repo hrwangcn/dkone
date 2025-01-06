@@ -94,6 +94,16 @@ class Player {
         ) {
             score += 30;
         }
+        //让AI理解子多可赢
+        let playerCount = game.board.grid.filter(cell => cell === this.type).length;
+        let opponentCount = game.board.grid.filter(cell => cell === -this.type).length;
+        if (playerCount + opponentCount === game.board.grid.length) {
+            if (playerCount > opponentCount) {
+                score += 1000;
+            } else {
+                score -= 1000;
+            }
+        }
         return score;
     }
 
