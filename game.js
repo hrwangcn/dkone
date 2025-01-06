@@ -320,4 +320,19 @@ class Board {
     isFull() {
         return this.grid.every(cell => cell !== 0);
     }
+
+    // 检查是否存在某种结构
+    hasStruct(pattern) {
+        if (pattern.length !== this.size * this.size) {
+            throw new Error('Invalid pattern length');
+        } else {
+            let result = true;
+            for (let i = 0; i < this.size * this.size; i++) {
+                if (pattern[i] !== -2) {
+                    result = result && pattern[i] === this.getCell(i);
+                }
+            }
+            return result;
+        }
+    }
 }
