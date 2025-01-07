@@ -75,8 +75,8 @@ class Player {
         }
         //让AI理解子多可赢
         if (game.board.isFull()) {
-						let playerCount = game.board.countByType(this.type);
-						let opponentCount = game.board.countByType(-this.type);
+            let playerCount = game.board.countByType(this.type);
+            let opponentCount = game.board.countByType(-this.type);
             if (playerCount > opponentCount) {
                 score += 1000;
             } else if (playerCount < opponentCount) {
@@ -378,10 +378,10 @@ class Board {
     isFull() {
         return this.grid.every(cell => cell !== 0);
     }
-    
+
     //统计某一类型棋子个数
-    countByType(playerType){
-			return this.grid.filter(cell => cell === this.type).length;
+    countByType(playerType) {
+        return this.grid.filter(cell => cell === this.type).length;
     }
 
     // 检查是否存在某种结构
