@@ -66,11 +66,22 @@ class Player {
 
     evaluate(game) {
         let score = 0;
+        //评估行列
         for (let i = 0; i < game.board.getSize(); i++) {
             let row = game.board.getRow(i);
             let col = game.board.getColumn(i);
             score += this.evaluateLine(row);
             score += this.evaluateLine(col);
+        }
+        //让AI理解子多可赢
+        if (game.board.isFull()) {
+						let playerCount = game.board.countByType(this.type);
+						let opponentCount = game.board.countByType(-this.type);
+            if (playerCount > opponentCount) {
+                score += 1000;
+            } else if (playerCount < opponentCount) {
+                score -= 1000;
+            }
         }
         score += this.evaluateSituation(game);
         return score;
@@ -93,16 +104,6 @@ class Player {
             game.hasSituation("cccbcccbcccbbbbo")
         ) {
             score += 30;
-        }
-        //让AI理解子多可赢
-        let playerCount = game.board.grid.filter(cell => cell === this.type).length;
-        let opponentCount = game.board.grid.filter(cell => cell === -this.type).length;
-        if (playerCount + opponentCount === game.board.grid.length) {
-            if (playerCount > opponentCount) {
-                score += 1000;
-            } else {
-                score -= 1000;
-            }
         }
         return score;
     }
@@ -376,6 +377,11 @@ class Board {
     // 检查棋盘是否已满
     isFull() {
         return this.grid.every(cell => cell !== 0);
+    }
+    
+    //统计某一类型棋子个数
+    countByType(playerType){
+			return this.grid.filter(cell => cell === this.type).length;
     }
 
     // 检查是否存在某种结构
