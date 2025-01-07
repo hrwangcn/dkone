@@ -399,3 +399,48 @@ class Board {
         }
     }
 }
+
+class ArrayUtil {
+    static rotate90(arr) {
+        let result = [];
+        let n = Math.sqrt(arr.length);
+        for (let j = 0; j < n; j++) {
+            result = result.concat(arr.filter((item, index) => index % n === j).reverse());
+        }
+        return result;
+    }
+
+    static rotate180(arr) {
+        return ArrayUtil.rotate90(ArrayUtil.rotate90(arr));
+    }
+
+    static rotate270(arr) {
+        let result = [];
+        let n = Math.sqrt(arr.length);
+        for (let j = n - 1; j > -1; j--) {
+            result = result.concat(arr.filter((item, index) => index % n === j));
+        }
+        return result;
+    }
+
+    static horoizontalFlip(arr) {
+        let result = [];
+        let n = Math.sqrt(arr.length);
+        for (let i = n - 1; i > -1; i--) {
+            result = result.concat(ArrayUtil.rotate180(arr).slice(i * n, i * n + n));
+        }
+        return result;
+    }
+
+    static verticalFlip(arr) {
+        return ArrayUtil.rotate180(ArrayUtil.horoizontalFlip(arr));
+    }
+
+    static leftDiagFlip(arr) {
+        return ArrayUtil.rotate270(ArrayUtil.horoizontalFlip(arr));
+    }
+
+    static rightDiagFlip(arr) {
+        return ArrayUtil.rotate90(ArrayUtil.horoizontalFlip(arr));
+    }
+}
