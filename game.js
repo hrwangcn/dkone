@@ -3,6 +3,56 @@ class Player {
     static get EMPTY() { return 0; }
     static get WHITE() { return -1; }
 
+    static get VALUETABLE() {
+        return {
+            "aaao":-10,
+            "bbbo": 10,
+            "aaaa": 1000,
+            "bbbb": -1000,
+            "aaba": 20,
+            "abaa": 20,
+            "bbab": -20,
+            "babb": -20,
+            "aaoa": 100,
+            "aoaa": 100,
+            "bbob": -100,
+            "bobb": -100,
+            "aaab": 20,
+            "baaa": 20,
+            "abbb": -20,
+            "bbba": -20,
+            "bbao": 10,
+            "bboa": 10,
+            "oabb": 10,
+            "aobb": 10,
+            "abbo": 10,
+            "obba": 10,
+            "aabo": -10,
+            "obaa": -10,
+            "boaa": -10,
+            "aaob": -10,
+            "baao": -10,
+            "oaab": -10,
+            "abao": 10,
+            "oaba": 10,
+            "obab": -10,
+            "babo": -10,
+            "aaoo": 20,
+            "ooaa": 20,
+            "aooa": 20,
+            "bboo": -20,
+            "boob": -20,
+            "aoao": -30,
+            "bobo": 30,
+            "oaoa": -30,
+            "obob": 30,
+            "aooo": 10,
+            "oooa": 10,
+            "booo": -10,
+            "ooob": 10
+        }
+    }
+
     constructor(type, isAI) {
         this.type = type;
         this.isAI = isAI;
@@ -68,8 +118,8 @@ class Player {
         let score = 0;
         //评估行列
         for (let i = 0; i < game.board.getSize(); i++) {
-            let row = game.board.getRow(i);
-            let col = game.board.getColumn(i);
+            let row = new Line(game.board.getRow(i));
+            let col = new Line(game.board.getColumn(i));
             score += this.evaluateLine(row);
             score += this.evaluateLine(col);
         }
@@ -83,51 +133,12 @@ class Player {
                 score -= 1000;
             }
         }
-        score += this.evaluateSituation(game);
-        return score;
-    }
-
-    evaluateSituation(game) {
-        let score = 0;
-        if (
-            game.hasSituation("obbbbcccbcccbccc") ||
-            game.hasSituation("bbbocccbcccbcccb") ||
-            game.hasSituation("bcccbcccbcccobbb") ||
-            game.hasSituation("cccbcccbcccbbbbo")
-        ) {
-            score += 60;
-        }
-        if (
-            game.hasSituation("obbbcccccccccccc") ||
-            game.hasSituation("ccccobbbcccccccc") ||
-            game.hasSituation("bcccbcccbcccobbb") ||
-            game.hasSituation("cccbcccbcccbbbbo")
-        ) {
-            score += 30;
-        }
         return score;
     }
 
     evaluateLine(line) {
-        let score = 0;
-        let playerCount = line.filter(cell => cell === this.type).length;
-        let opponentCount = line.filter(cell => cell === -this.type).length;
-
-        if (playerCount === 4) {
-            score += 1000;
-        } else if (opponentCount === 4) {
-            score -= 1000;
-        } else if (playerCount === 3 && opponentCount === 0) {
-            score += 50;
-        } else if (opponentCount === 3 && playerCount === 0) {
-            score -= 50;
-        } else if (playerCount === 2 && opponentCount === 0) {
-            score += 10;
-        } else if (opponentCount === 2 && playerCount === 0) {
-            score -= 10;
-        }
-
-        return score;
+        let lineString = line.getCharacterString(this.type);
+        return Player.VALUETABLE[lineString] || 0;
     }
 }
 
@@ -400,7 +411,7 @@ class Board {
     }
 }
 
-class ArrayUtil {
+class BoardUtil {
     static rotate90(arr) {
         let result = [];
         let n = Math.sqrt(arr.length);
@@ -411,7 +422,7 @@ class ArrayUtil {
     }
 
     static rotate180(arr) {
-        return ArrayUtil.rotate90(ArrayUtil.rotate90(arr));
+        return BoardUtil.rotate90(BoardUtil.rotate90(arr));
     }
 
     static rotate270(arr) {
@@ -427,20 +438,48 @@ class ArrayUtil {
         let result = [];
         let n = Math.sqrt(arr.length);
         for (let i = n - 1; i > -1; i--) {
-            result = result.concat(ArrayUtil.rotate180(arr).slice(i * n, i * n + n));
+            result = result.concat(BoardUtil.rotate180(arr).slice(i * n, i * n + n));
         }
         return result;
     }
 
     static verticalFlip(arr) {
-        return ArrayUtil.rotate180(ArrayUtil.horoizontalFlip(arr));
+        return BoardUtil.rotate180(BoardUtil.horoizontalFlip(arr));
     }
 
     static leftDiagFlip(arr) {
-        return ArrayUtil.rotate270(ArrayUtil.horoizontalFlip(arr));
+        return BoardUtil.rotate270(BoardUtil.horoizontalFlip(arr));
     }
 
     static rightDiagFlip(arr) {
-        return ArrayUtil.rotate90(ArrayUtil.horoizontalFlip(arr));
+        return BoardUtil.rotate90(BoardUtil.horoizontalFlip(arr));
+    }
+}
+
+class Line {
+    constructor(array) {
+        this.array = array;
+    }
+
+    countByType(playerType) {
+        return this.array.filter(cell => cell === playerType).length;
+    }
+
+    getCharacterString(playerType) {
+        let result = '';
+        for (let i = 0; i < this.array.length; i++) {
+            if (this.array[i] === playerType) {
+                result += 'a';
+            } else if (this.array[i] === -playerType) {
+                result += 'b';
+            } else {
+                result += 'o';
+            }
+        }
+        return result;
+    }
+
+    reverse() {
+        return new Line(this.array.reverse());
     }
 }
