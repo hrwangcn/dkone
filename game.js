@@ -66,13 +66,6 @@ class Player {
 
     evaluate(game) {
         let score = 0;
-        //评估行列
-        for (let i = 0; i < game.board.getSize(); i++) {
-            let row = new Line(game.board.getRow(i));
-            let col = new Line(game.board.getColumn(i));
-            score += this.evaluateLine(row);
-            score += this.evaluateLine(col);
-        }
         //让AI理解子多可赢
         if (game.board.isFull()) {
             let playerCount = game.board.countByType(this.type);
@@ -82,6 +75,13 @@ class Player {
             } else if (playerCount < opponentCount) {
                 score -= 1000;
             }
+        }
+        //评估行列
+        for (let i = 0; i < game.board.getSize(); i++) {
+            let row = new Line(game.board.getRow(i));
+            let col = new Line(game.board.getColumn(i));
+            score += this.evaluateLine(row);
+            score += this.evaluateLine(col);
         }
         return score;
     }
@@ -102,26 +102,6 @@ class Game {
     static get RUN() { return 1; }
     static get WIN() { return 2; }
     static get TIE() { return 3; }
-
-    // 定义 cases 为静态成员
-    static get cases() {
-        return {
-            'aabo': '二顶一',
-            'obaa': '二顶一',
-            'oaab': '二顶一',
-            'baao': '二顶一',
-            'aabb': '二顶二',
-            'bbaa': '二顶二',
-            'abbb': '一串三',
-            'bbba': '一串三',
-            'abba': '两夹沟',
-            'baab': '两撑乎',
-            'abao': '一夹沟',
-            'oaba': '一夹沟',
-            'babo': '一撑乎',
-            'obab': '一撑乎',
-        };
-    }
 
     constructor(player1, player2) {
         this.players = [player1, player2];
@@ -177,17 +157,17 @@ class Game {
         let colString = this.getCharacterString(col);
         let playerType = this.getCurrentPlayer().type;
 
-        if (Game.cases[rowString]) {
+        if (CASES[rowString]) {
             this.board.setRow(row.map(item => {
                 return item === playerType ? item : 0;
             }), Math.floor(target / this.board.getSize()));
-            this.items.push(Game.cases[rowString]);
+            this.items.push(CASES[rowString]);
         }
-        if (Game.cases[colString]) {
+        if (CASES[colString]) {
             this.board.setColumn(col.map(item => {
                 return item === playerType ? item : 0;
             }), target % this.board.getSize());
-            this.items.push(Game.cases[colString]);
+            this.items.push(CASES[colString]);
         }
     }
 
