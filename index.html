@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Two Kill One!</title>
     <link rel="stylesheet" href="style.css">
-    <script src = "./value.js"></script>
-    <script src = "./case.js"></script>
+    <script src="./value.js"></script>
+    <script src="./case.js"></script>
     <script src="./game.js"></script>
     <script>
         let player1 = new Player(Player.BLACK, false);
@@ -14,42 +15,46 @@
 
         window.onload = main;
 
-				function main() {
-						updateUI(game);
-						if (game.getCurrentPlayer().isAI) {
-								setTimeout(() => {
-										game.excute(game.getCurrentPlayer().getAction(game));
-										updateUI(game);
-										showAlert(game);
-								}, 800);
-						}
-						document.getElementById("board").addEventListener("click", e => {
-								let action = game.getCurrentPlayer().getAction(game, { target: parseInt(e.target.id) });
-								game.excute(action);
-								updateUI(game);
-								showAlert(game);
-								if (game.getCurrentPlayer().isAI) {
-										setTimeout(() => {
-												game.excute(game.getCurrentPlayer().getAction(game));
-												updateUI(game);
-												showAlert(game);
-										}, 800);
-								}
-						});
+        function main() {
+            updateUI(game);
+            AIMove(game, 800);
+            document.getElementById("board").addEventListener("click", e => {
+                let action = game.getCurrentPlayer().getAction(game, { target: parseInt(e.target.id) });
+                game.excute(action);
+                updateUI(game);
+                showAlert(game);
+                AIMove(game, 800);
+            });
 
-						document.getElementById("restart").addEventListener("click", () => {
-								game = new Game(player1, player2).start();
-								updateUI(game);
-						});
+            document.getElementById("restart").addEventListener("click", () => {
+                game = new Game(player1, player2).start();
+                AIMove(game, 800);
+                updateUI(game);
+            });
 
-						document.getElementById("retract").addEventListener("click", () => {
-								if (game.retract()) {
-										updateUI(game);
-								} else {
-										alert("没有可悔棋了");
-								}
-						});
-				}
+            document.getElementById("retract").addEventListener("click", () => {
+                if (game.retract()) {
+                    updateUI(game);
+                } else {
+                    alert("没有可悔棋了");
+                }
+            });
+        }
+
+        function AIMove(game, time) {
+            let cp = game.getCurrentPlayer();
+            if (!cp.isAI || game.status !== Game.RUN) {
+                //console.log("It's not AI's turn!");
+                return 0;
+            } else {
+                setTimeout(() => {
+                    game.excute(cp.getAction(game));
+                    updateUI(game);
+                    showAlert(game);
+                    AIMove(game, time);//AI的自我博弈
+                }, time);
+            }
+        }
 
         function updateUI(game) {
             let info = document.getElementById("info");
@@ -95,6 +100,7 @@
         }
     </script>
 </head>
+
 <body>
     <div id="info"></div>
     <div id="toast"></div>
@@ -129,4 +135,5 @@
         <button id="retract" class="btn">悔棋</button>
     </div>
 </body>
+
 </html>

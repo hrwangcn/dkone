@@ -108,6 +108,7 @@ class Game {
         this.winner = null;
         this.items = [];
         this.history = [];
+        this.historyStep = [];
         this.board = new Board(); // 使用 Board 类
     }
 
@@ -173,6 +174,7 @@ class Game {
 
     excute(action) {
         this.items = [];
+        this.historyStep.push(action.target);
         this.history.push(JSON.stringify(this.board.grid));
         this.board.setCell(action.target, this.getCurrentPlayer().type);
         this.updateBoard(action.target);
@@ -245,6 +247,7 @@ class Game {
         clonedGame.winner = this.winner;
         clonedGame.items = [...this.items];
         clonedGame.history = [...this.history];
+        clonedGame.historyStep = [...this.historyStep];
         clonedGame.board = this.board.clone(); // 克隆棋盘
         clonedGame.players = this.players.map(player => {
             let clonedPlayer = new Player(player.type, player.isAI);
