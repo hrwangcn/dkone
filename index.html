@@ -19,11 +19,15 @@
             updateUI(game);
             AIMove(game, 800);
             document.getElementById("board").addEventListener("click", e => {
-                let action = game.getCurrentPlayer().getAction(game, { target: parseInt(e.target.id) });
-                game.excute(action);
+                let option = { target: parseInt(e.target.id) }
+                let player = game.getCurrentPlayer();
+                if (!player.isAI) {
+                    let action = player.getAction(game, option);
+                    game.excute(action);
+                    AIMove(game, 800);
+                }
                 updateUI(game);
                 showAlert(game);
-                AIMove(game, 800);
             });
 
             document.getElementById("restart").addEventListener("click", () => {
