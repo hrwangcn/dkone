@@ -181,7 +181,7 @@ class Game {
     }
 
     findWinner(target) {
-				let type = this.getCurrentPlayer().type;
+        let type = this.getCurrentPlayer().type;
         let colString = Util.getCharacterString(this.board.getColumn(target % this.board.getSize()), type);
         let rowString = Util.getCharacterString(this.board.getRow(Math.floor(target / this.board.getSize())), type);
         if (colString === 'aaaa' || rowString === 'aaaa') {
@@ -267,19 +267,19 @@ class Board {
     setCell(index, value) {
         this.grid[index] = value;
     }
-    
+
     // 获取当前board所有的对称性数组
-    getAllSymmetries(){
-		    let symmetries = [];
-		    symmetries.push(this.grid);
-		    symmetries.push(Util.rotate90(this.grid));
-		    symmetries.push(Util.rotate180(this.grid));
-		    symmetries.push(Util.rotate270(this.grid));
-		    symmetries.push(Util.horoizontalFlip(this.grid));
-		    symmetries.push(Util.verticalFlip(this.grid));
-		    symmetries.push(Util.leftDiagFlip(this.grid));
-		    symmetries.push(Util.rightDiagFlip(this.grid));
-		    return symmetries;
+    getAllSymmetries() {
+        let symmetries = [];
+        symmetries.push(this.grid);
+        symmetries.push(Util.rotate90(this.grid));
+        symmetries.push(Util.rotate180(this.grid));
+        symmetries.push(Util.rotate270(this.grid));
+        symmetries.push(Util.horoizontalFlip(this.grid));
+        symmetries.push(Util.verticalFlip(this.grid));
+        symmetries.push(Util.leftDiagFlip(this.grid));
+        symmetries.push(Util.rightDiagFlip(this.grid));
+        return symmetries;
     }
 
     // 克隆棋盘
@@ -295,11 +295,11 @@ class Board {
     }
 
     // 检查是否存在某种结构
-    hasStruct(pattern, playerType) {
-		    let symmString = new Set();
-		    //需要补充
-		    getAllSymmetries().map()
-        return false;
+    hasStruct(pattern, type) {
+        let symmString = new Set(this.getAllSymmetries().map(symm => {
+            return Util.getCharacterString(symm, type);
+        }));
+        return true && symmString.keys().find(str => Util.compareCharacterString(str, pattern));
     }
 }
 
@@ -346,9 +346,9 @@ class Util {
     static rightDiagFlip(arr) {
         return Util.rotate90(Util.horoizontalFlip(arr));
     }
-    
+
     static getCharacterString(array, type) {
-		    let result = '';
+        let result = '';
         for (let i = 0; i < array.length; i++) {
             if (array[i] === type) {
                 result += 'a';
@@ -360,8 +360,20 @@ class Util {
         }
         return result;
     }
-    
-    static countByType(array, type){
+
+    static compareCharacterString(str, pattern) {
+        if (str.length !== pattern.length) {
+            return false;
+        }
+        for (let i = 0; i < pattern.length; i++) {
+            if (str[i] !== pattern[i] && pattern[i] !== 'c') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static countByType(array, type) {
         return array.filter(cell => cell === type).length;
     }
 }
