@@ -68,8 +68,8 @@ class Player {
         let score = 0;
         //让AI理解子多可赢
         if (game.board.isFull()) {
-            let playerCount = game.board.countByType(this.type);
-            let opponentCount = game.board.countByType(-this.type);
+            let playerCount = Util.countByType(game.board.grid, this.type);
+            let opponentCount = Util.countByType(game.board.grid, -this.type);
             if (playerCount > opponentCount) {
                 score += 1000;
             } else if (playerCount < opponentCount) {
@@ -78,8 +78,8 @@ class Player {
         }
         //评估行列
         for (let i = 0; i < game.board.getSize(); i++) {
-            let row = new Line(game.board.getRow(i));
-            let col = new Line(game.board.getColumn(i));
+            let row = game.board.getRow(i);
+            let col = game.board.getColumn(i);
             score += this.evaluateLine(row);
             score += this.evaluateLine(col);
         }
@@ -87,7 +87,7 @@ class Player {
     }
 
     evaluateLine(line) {
-        let lineString = line.getCharacterString(this.type);
+        let lineString = Util.getCharacterString(line, this.type);
         return VALUETABLE[lineString] || 0;
     }
 }
@@ -132,31 +132,12 @@ class Game {
         this.players.forEach(player => player.isMyTurn = !player.isMyTurn);
     }
 
-    getCharacterString(array) {
-        let string = '';
-        let type = this.getCurrentPlayer().type;
-        for (let i = 0; i < array.length; i++) {
-            switch (array[i]) {
-                case type:
-                    string += 'a';
-                    break;
-                case -type:
-                    string += 'b';
-                    break;
-                case 0:
-                    string += 'o';
-                    break;
-            }
-        }
-        return string;
-    }
-
     updateBoard(target) {
         let row = this.board.getRow(Math.floor(target / this.board.getSize()));
         let col = this.board.getColumn(target % this.board.getSize());
-        let rowString = this.getCharacterString(row);
-        let colString = this.getCharacterString(col);
         let playerType = this.getCurrentPlayer().type;
+        let rowString = Util.getCharacterString(row, playerType);
+        let colString = Util.getCharacterString(col, playerType);
 
         if (CASES[rowString]) {
             this.board.setRow(row.map(item => {
@@ -200,8 +181,9 @@ class Game {
     }
 
     findWinner(target) {
-        let colString = this.getCharacterString(this.board.getColumn(target % this.board.getSize()));
-        let rowString = this.getCharacterString(this.board.getRow(Math.floor(target / this.board.getSize())));
+				let type = this.getCurrentPlayer().type;
+        let colString = Util.getCharacterString(this.board.getColumn(target % this.board.getSize()), type);
+        let rowString = Util.getCharacterString(this.board.getRow(Math.floor(target / this.board.getSize())), type);
         if (colString === 'aaaa' || rowString === 'aaaa') {
             return this.getCurrentPlayer();
         } else if (this.board.isFull()) {
@@ -212,31 +194,6 @@ class Game {
             if (sumBoard < 0) {
                 return this.getPlayerByType(Player.WHITE);
             }
-        }
-    }
-
-    hasSituation(pattern) {
-        if (pattern.length !== this.board.grid.length) {
-            throw new Error('Pattern length must be equal to board size');
-        } else {
-            let kernel = [];
-            for (let i = 0; i < pattern.length; i++) {
-                switch (pattern[i]) {
-                    case 'a':
-                        kernel.push(this.getCurrentPlayer().type);
-                        break;
-                    case 'b':
-                        kernel.push(-this.getCurrentPlayer().type);
-                        break;
-                    case 'o':
-                        kernel.push(0);
-                        break;
-                    case 'c':
-                        kernel.push(-2);
-                        break;
-                }
-            }
-            return this.board.hasStruct(kernel);
         }
     }
 
@@ -310,6 +267,20 @@ class Board {
     setCell(index, value) {
         this.grid[index] = value;
     }
+    
+    // 获取当前board所有的对称性数组
+    getAllSymmetries(){
+		    let symmetries = [];
+		    symmetries.push(this.grid);
+		    symmetries.push(Util.rotate90(this.grid));
+		    symmetries.push(Util.rotate180(this.grid));
+		    symmetries.push(Util.rotate270(this.grid));
+		    symmetries.push(Util.horoizontalFlip(this.grid));
+		    symmetries.push(Util.verticalFlip(this.grid));
+		    symmetries.push(Util.leftDiagFlip(this.grid));
+		    symmetries.push(Util.rightDiagFlip(this.grid));
+		    return symmetries;
+    }
 
     // 克隆棋盘
     clone() {
@@ -323,28 +294,16 @@ class Board {
         return this.grid.every(cell => cell !== 0);
     }
 
-    //统计某一类型棋子个数
-    countByType(playerType) {
-        return this.grid.filter(cell => cell === this.type).length;
-    }
-
     // 检查是否存在某种结构
-    hasStruct(kernel) {
-        if (kernel.length !== this.size * this.size) {
-            throw new Error('Invalid kernel length');
-        } else {
-            let result = true;
-            for (let i = 0; i < this.size * this.size; i++) {
-                if (kernel[i] !== -2) {
-                    result = result && kernel[i] === this.getCell(i);
-                }
-            }
-            return result;
-        }
+    hasStruct(pattern, playerType) {
+		    let symmString = new Set();
+		    //需要补充
+		    getAllSymmetries().map()
+        return false;
     }
 }
 
-class BoardUtil {
+class Util {
     static rotate90(arr) {
         let result = [];
         let n = Math.sqrt(arr.length);
@@ -355,7 +314,7 @@ class BoardUtil {
     }
 
     static rotate180(arr) {
-        return BoardUtil.rotate90(BoardUtil.rotate90(arr));
+        return Util.rotate90(Util.rotate90(arr));
     }
 
     static rotate270(arr) {
@@ -371,45 +330,45 @@ class BoardUtil {
         let result = [];
         let n = Math.sqrt(arr.length);
         for (let i = n - 1; i > -1; i--) {
-            result = result.concat(BoardUtil.rotate180(arr).slice(i * n, i * n + n));
+            result = result.concat(Util.rotate180(arr).slice(i * n, i * n + n));
         }
         return result;
     }
 
     static verticalFlip(arr) {
-        return BoardUtil.rotate180(BoardUtil.horoizontalFlip(arr));
+        return Util.rotate180(Util.horoizontalFlip(arr));
     }
 
     static leftDiagFlip(arr) {
-        return BoardUtil.rotate270(BoardUtil.horoizontalFlip(arr));
+        return Util.rotate270(Util.horoizontalFlip(arr));
     }
 
     static rightDiagFlip(arr) {
-        return BoardUtil.rotate90(BoardUtil.horoizontalFlip(arr));
+        return Util.rotate90(Util.horoizontalFlip(arr));
     }
-}
-
-class Line {
-    constructor(array) {
-        this.array = array;
-    }
-
-    countByType(playerType) {
-        return this.array.filter(cell => cell === playerType).length;
-    }
-
-    getCharacterString(playerType) {
-        let result = '';
-        for (let i = 0; i < this.array.length; i++) {
-            if (this.array[i] === playerType) {
+    
+    static getCharacterString(array, type) {
+		    let result = '';
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === type) {
                 result += 'a';
-            } else if (this.array[i] === -playerType) {
+            } else if (array[i] === -type) {
                 result += 'b';
             } else {
                 result += 'o';
             }
         }
         return result;
+    }
+    
+    static countByType(array, type){
+        return array.filter(cell => cell === type).length;
+    }
+}
+
+class Line {
+    constructor(array) {
+        this.array = array;
     }
 
     reverse() {
